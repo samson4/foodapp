@@ -1,0 +1,23 @@
+{% extends 'blog/layout.html'%}
+{% block content %}
+ <!-- Testimonial Start -->
+{% for restaurant in restaurants %}
+
+ <div class="container-fluid py-5">
+  <div class="container">
+      <div class=" testimonial-carousel">
+          <div class="testimonial-item">
+              <img class="position-relative rounded-circle bg-white shadow mx-auto" src="{{restaurant.restaurant_logo.url}}" style="width: 100px; height: 100px; padding: 12px; margin-bottom: -50px; z-index: 1;" alt="">
+              <div class="bg-light text-center p-4 pt-0">
+                  <a href="#"><h5 class="font-weight-medium mt-5">{{restaurant.restaurant_name}}</h5></a>
+                  <p class="text-muted font-italic">Bio</p>
+                  <p class="m-0">Sed ea amet kasd elitr stet, stet rebum et ipsum est duo elitr eirmod clita lorem. Dolor ipsum clita</p>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
+{%endfor%}
+<!-- Testimonial End -->
+{%endblock content%}
+
