@@ -44,7 +44,7 @@
                       <div class="p-3" style="max-width: 900px;">
                           <h4 class="text-white text-uppercase mb-md-3">Order and Delivery</h4>
                           <h1 class="display-3 text-white mb-md-4">Best For You</h1>
-                          <a href="{% url 'restaurants'%}" class="btn btn-primary py-md-3 px-md-5 mt-2">See All Restaurants</a>
+                          <a href="{% url 'location'%}" class="btn btn-primary py-md-3 px-md-5 mt-2"><i class="fa fa-map-marker" aria-hidden="true"> See Restaurants near you</i></a>
                       </div>
                   </div>
               </div>
@@ -54,7 +54,7 @@
                       <div class="p-3" style="max-width: 900px;">
                           <h4 class="text-white text-uppercase mb-md-3">Order and Delivery</h4>
                           <h1 class="display-3 text-white mb-md-4">you can be Anywhere</h1>
-                          <a href="" class="btn btn-primary py-md-3 px-md-5 mt-2">See All Restaurants </a>
+                          <a href="{%url 'location'%}" class="btn btn-primary py-md-3 px-md-5 mt-2"><i class="fa fa-map-marker" aria-hidden="true"> See Restaurants near you</i> </a>
                       </div>
                   </div>
               </div>
@@ -72,6 +72,7 @@
       </div>
   </div>
 <!-- Working Process Start -->
+
 <div class="container-fluid pt-5">
    <div class="container">
        <h6 class="text-secondary text-uppercase text-center font-weight-medium mb-3">Working Process</h6>
@@ -114,7 +115,9 @@
 </div>
 <!-- Working Process End -->
 
-     
+    {{rating.avg}}
+
+     {{PostListView.get_fasting_foods}}
     <div class="container #0d6efd" >
       <h1 class="text-center text-light mb-3 btn-info" >Featured Dishes</h1>
       <div class="row carousel-inner">
@@ -125,13 +128,18 @@
                     <div class="card-body text-center">      
                       <a class="btn btn-dark" href="{% url 'user-posts' post.author.username %}">{{ post.author }}</a>
                       <img class="rounded-circle article-img" src="{{ object.author.profile.image.url }}">         
-                      <h5 class="text-center"><a href="#">{{ post.title }} </a><span class="badge badge-{{ item.label_colour }}">{{ item.labels }}</span></h5>
-                      <h5 class="text-center">ETB {{ post.price }}</h5>
+                      <h5 class="text-center">{{ post.title }}</h5>
+                      <span  class="btn-warning"><a href="{{post.labels}}">{{ post.labels }}</a></span>
+                      <h5 class="text-center">ETB {{ post.price|floatformat:2 }}</h5>
                       <a href="{% url 'post-detail' post.id %}" class="btn btn-info">View Details</a>
                     </div>
                 </div>
             </div>            
         {% endfor %}
+
+{% for recent in recently_viewed_post %}
+    <p>{{recent}}</p>
+{% endfor %}
       </div>
     </div>
   </div>

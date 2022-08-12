@@ -42,19 +42,19 @@
                 </div>
                 <div class="col-md-6 text-center text-lg-right">
                     <div class="d-inline-flex align-items-center">
-                        <a class="text-white px-3" href="">
+                        <a class="text-white px-3" href="https://www.facebook.com/fastdelivery/">
                             <i class="fab fa-facebook-f"></i>
                         </a>
-                        <a class="text-white px-3" href="">
+                        <a class="text-white px-3" href="https://www.twitter.com/fastdelivery/">
                             <i class="fab fa-twitter"></i>
                         </a>
-                        <a class="text-white px-3" href="">
+                        <a class="text-white px-3" href="https://www.linkedin.com/fastdelivery/">
                             <i class="fab fa-linkedin-in"></i>
                         </a>
-                        <a class="text-white px-3" href="">
+                        <a class="text-white px-3" href="https://www.instagram.com/fastdelivery/">
                             <i class="fab fa-instagram"></i>
                         </a>
-                        <a class="text-white pl-3" href="">
+                        <a class="text-white pl-3" href="https://www.youtube.com/fastdelivery/">
                             <i class="fab fa-youtube"></i>
                         </a>
                     </div>
@@ -81,19 +81,32 @@
                      {%if not user.is_staff %}
                         <a href="{% url 'blog-home' %}" class="nav-item nav-link active">Home</a>
                         <a href="{% url 'blog-about'%}" class="nav-item nav-link">About us</a>
-                        <a href="{%url 'profile'%}" class="nav-item nav-link">Profile</a>
+                        <a href="{%url 'profile'%}" class="nav-item nav-link"> My Profile</a>
                         <div class="nav-item ">
                            <a href="{%url 'restaurants'%}" class="nav-link " >Restaurants</a>
                         </div>
-                        <a href="{%url 'cart'%}" class="nav-item nav-link">My Cart</a>
+                        <a href="{%url 'cart'%}" class="nav-item nav-link">My Cart🛒</a>
+                        <div class="dropdown">
+                        <a class="dropdown nav-item nav-link">categories</a>
+                        </div>
                         <a href="{%url 'logout'%}" class="nav-item nav-link">Logout</a>
                      {% elif user.is_staff %}
                            <a href="{% url 'post-create' %}" class="nav-item nav-link active">New Post</a>
-                           <a href="{% url 'blog-about'%}" class="nav-item nav-link">Orders</a>
-                           <a href="#" class="nav-item nav-link">Profile</a>
+                           <a href="{% url 'order_details'%}" class="nav-item nav-link">Orders</a>
+                           <a href="{% url 'profile' %}" class="nav-item nav-link"> My Profile</a>
                            <div class="nav-item ">
                               <a href="{% url 'restaurants'%}" class="nav-link ">Restaurants</a>
                            </div>
+                           <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Dropdown button
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item" href="#">Action</a>
+                                <a class="dropdown-item" href="#">Another action</a>
+                                <a class="dropdown-item" href="#">Something else here</a>
+                            </div>
+                            </div>
                            <a href="{%url 'logout'%}" class="nav-item nav-link">Logout</a>
                      {%endif%}   
                      {%else%} 
@@ -103,6 +116,7 @@
                         <div class="nav-item ">
                            <a href="{% url 'restaurants' %}" class="nav-link ">Restaurants</a>
                         </div>
+                        <a class="nav-item nav-link">categories</a>
                         <a href="{%url 'login'%}" class="nav-item nav-link">Login</a> 
                      {%endif%}
                     </div>
@@ -129,29 +143,28 @@
 <div class="container-fluid bg-primary text-white mt-5 pt-5 px-sm-3 px-md-5">
    <div class="row pt-5">
        <div class="col-lg-3 col-md-6 mb-5">
-           <a href=""><h1 class="text-secondary mb-3"><span class="text-white">Fast</span>Delivery</h1></a>
-           <p>Volup amet magna clita tempor. Tempor sea eos vero ipsum. Lorem lorem sit sed elitr sit no, sed kasd et ipsum dolor duo dolor</p>
+           <a href="{%url 'blog-home'%}"><h1 class="text-secondary mb-3"><span class="text-white">Fast</span>Delivery</h1></a>
+           <p>over a decade now, we’ve been empowering our customers in discovering new tastes and experiences across countries. By putting together meticulous information for our customers, we enable them to make an informed choice</p>
            <div class="d-flex justify-content-start mt-4">
-               <a class="btn btn-outline-light rounded-circle text-center mr-2 px-0" style="width: 38px; height: 38px;" href="#"><i class="fab fa-twitter"></i></a>
-               <a class="btn btn-outline-light rounded-circle text-center mr-2 px-0" style="width: 38px; height: 38px;" href="#"><i class="fab fa-facebook-f"></i></a>
-               <a class="btn btn-outline-light rounded-circle text-center mr-2 px-0" style="width: 38px; height: 38px;" href="#"><i class="fab fa-linkedin-in"></i></a>
-               <a class="btn btn-outline-light rounded-circle text-center mr-2 px-0" style="width: 38px; height: 38px;" href="#"><i class="fab fa-instagram"></i></a>
+               <a class="btn btn-outline-light rounded-circle text-center mr-2 px-0" style="width: 38px; height: 38px;" href="https://www.twitter.com/fastdelivery/"><i class="fab fa-twitter"></i></a>
+               <a class="btn btn-outline-light rounded-circle text-center mr-2 px-0" style="width: 38px; height: 38px;" href="https://www.facebook.com/fastdelivery/"><i class="fab fa-facebook-f"></i></a>
+               <a class="btn btn-outline-light rounded-circle text-center mr-2 px-0" style="width: 38px; height: 38px;" href="https://www.linkedin.com/fastdelivery/"><i class="fab fa-linkedin-in"></i></a>
+               <a class="btn btn-outline-light rounded-circle text-center mr-2 px-0" style="width: 38px; height: 38px;" href="https://www.instagram.com/fastdelivery/"><i class="fab fa-instagram"></i></a>
            </div>
        </div>
        <div class="col-lg-3 col-md-6 mb-5">
            <h4 class="text-white mb-4">Get In Touch</h4>
-           <p>Dolor clita stet nonumy clita diam vero, et et ipsum diam labore</p>
-           <p><i class="fa fa-map-marker-alt mr-2"></i>123 Street, New York, USA</p>
-           <p><i class="fa fa-phone-alt mr-2"></i>+012 345 67890</p>
-           <p><i class="fa fa-envelope mr-2"></i>info@example.com</p>
+           <p><i class="fa fa-map-marker-alt mr-2"></i>Poly Campus, Bahir Dar, ET</p>
+           <p><i class="fa fa-phone-alt mr-2"></i>+251 9111 11111</p>
+           <p><i class="fa fa-envelope mr-2"></i>FastDelivery@gmail.com</p>
        </div>
        <div class="col-lg-3 col-md-6 mb-5">
            <h4 class="text-white mb-4">Quick Links</h4>
            <div class="d-flex flex-column justify-content-start">
-               <a class="text-white mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Home</a>
-               <a class="text-white mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>About Us</a>
-               <a class="text-white mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Services</a>
-               <a class="text-white mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Pricing</a>
+               <a class="text-white mb-2" href="{%url 'blog-home'%}"><i class="fa fa-angle-right mr-2"></i>Home</a>
+               <a class="text-white mb-2" href="{%url 'blog-about'%}"><i class="fa fa-angle-right mr-2"></i>About Us</a>
+               <a class="text-white mb-2" href="{%url 'restaurants'%}"><i class="fa fa-angle-right mr-2"></i>Restaurants</a>
+               <!-- <a class="text-white mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Pricing</a> -->
                <a class="text-white" href="#"><i class="fa fa-angle-right mr-2"></i>Contact Us</a>
            </div>
        </div>

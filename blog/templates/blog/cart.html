@@ -4,46 +4,45 @@
     <div class="container">
         <div class="row">
             <div class="col-sm-9 mt-5">
-                <h3 class="text-center">Your Cart</h3>
-                {% if cart_items %}
+                <h1 class="text-center">Your Cart</h1>  
+                     
                 <div class="table-responsive">
                     <table class="table table-light">
                         <thead>
                         <tr>
                             <th scope="col">Name</th>
-                            <th scope="col">Description</th>
-                            <th scope="col">Specification</th>
-                            <th scope="col">Price</th>
+                            <th scope="col">Ingredients</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Unit Price</th>
                             <th scope="col">Total Pieces</th>
                             <th scope="col"></th>
                         </tr>
                         </thead>
+          
                         <tbody>
-                            {% for cart in cart_items %}
+                        {% for item in Item %}
                         <tr>
-                            <td>{{ cart.item.title }} <span class="badge badge-{{ cart.item.label_colour }}">{{ cart.item.labels }}</span></td>
-                            <td>{{ cart.item.description }}</td>
-                            <td>{{ cart.item.instructions }}</td>
-                            <td>{{ cart.item.price }}</td>
-                            <td>{{ cart.item.pieces }} pieces</td>
-                            <td><a class="btn btn-danger" href="#">Delete</a></td>
-                        </tr>
-                            {% endfor %}
+                            <td>{{ item.product }} <span class="badge badge-{{ cart.item.label_colour }}">{{ item.labels }}</span></td>
+                            <td>{{ item.product.content }}</td>
+                            <td>{{ item.status }}</td>
+                            <td>{{ item.product.price }}</td>
+                            <td><input type="number" value="{{item.quantity}}"></td>
+                            
+                            <td><a class="btn btn-danger" href="{%url 'remove_from_cart' item.id%}">Delete</a></td>
+                        {% endfor %}
+                       
                         </tbody>
                     </table>
-                </div>
-                {% else %}
-                <h4 class="text-center">Sorry, Your Cart is Empty....Please add Items!!!</h4>
-                {% endif %}
+                </div>        
             </div>
             <div class="col-sm-3 mt-5 mb-3">
                 <div class="content-section">
                     <h3 class="text-center">Order Summary</h3>
                       <ul class="list-group">
-                        <li class="list-group-item list-group-item-light text-center text-dark">Total: {{ total }}</li>
-                        <li class="list-group-item list-group-item-light text-center text-dark">Number of Orders: {{ count }}</li>
-                        <li class="list-group-item list-group-item-light text-center text-dark">Total Pieces: {{ total_pieces }}</li>
-                        <li class="list-group-item list-group-item-light text-center text-dark"><a class="btn btn-primary" href="#">Proceed To Checkout</a></li>
+                        <li class="list-group-item list-group-item-light text-center text-dark">Total: {{total}} Birr</li>
+                        <li class="list-group-item list-group-item-light text-center text-dark">Number of Orders: {{  number_of_orders}}</li>
+                        <li class="list-group-item list-group-item-light text-center text-dark">Total Pieces: {{ number.quantity__sum }}</li>
+                        <li class="list-group-item list-group-item-light text-center text-dark"><a class="btn btn-primary" href="{% url 'payment' %}">Proceed To Checkout</a></li>
                         <li class="list-group-item list-group-item-light text-center"><a class="btn btn-success" href="/">Continue Buying</a></li>
                       </ul>
                 </div>
@@ -51,4 +50,5 @@
         </div>
     </div>
 </div>
+{{bill.product__price__sum}}
 {% endblock content %}

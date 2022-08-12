@@ -35,14 +35,14 @@
                     <div class="navbar-nav">
                         {% if user.is_authenticated %}
                             {%if not user.is_staff%}
-                                <a class="nav-item nav-link" href="{% url 'profile' %}">Profile</a>
+                                <a class="nav-item nav-link" href="{% url 'profile' %}">My Profile</a>
                                 <a class="nav-item nav-link" href="{% url 'restaurants' %}">Restaurants</a>
                                 <a class="nav-item nav-link" href="{% url 'cart' %}">My Cart🛒</a>
                                 <a class="nav-item nav-link" href="{% url 'logout' %}">Logout</a> 
                                 
                             {%elif User.is_staff%}    
                                 <a class="nav-item nav-link" href="{% url 'post-create' %}">New Post</a>
-                                <a class="nav-item nav-link" href="#">Orders</a>
+                                <a class="nav-item nav-link" href="{%url 'order_details'%}">Orders</a>
                                 <a class="nav-item nav-link" href="{%url 'restaurants'%}">Restaurants</a>
                                 <a class="nav-item nav-link" href="{% url 'profile' %}">Profile</a>
                                 <a class="nav-item nav-link" href="{% url 'logout' %}">Logout</a> 

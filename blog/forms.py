@@ -5,9 +5,10 @@ from . models import Comment,rregister
 class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
-        fields = ('review',)  
+        fields = ('review','rating',)  
         Widgets={
             'review': forms.Textarea(attrs={'class':'form-control'}),
+            'rating': forms.Textarea(attrs={'class':'form-control'}),
 
         }
 
