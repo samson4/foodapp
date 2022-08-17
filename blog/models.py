@@ -1,4 +1,5 @@
 from lib2to3.pgen2 import token
+from random import choices
 from statistics import mode
 from django.conf import Settings
 from django.db import models
@@ -38,37 +39,10 @@ class Post(models.Model):
         return reverse('post-detail', kwargs={'pk': self.pk})   
 
     def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)   
-
-# class Product(models.model):
-#     name=models.CharField(max_length=200)
-#     price = models.DecimalField(max_digits=10,decimal_places=2,default=0.00)         
-#     def __str__(self):
-#         return self.name
-class Order(models.Model):
-    customer = models.ForeignKey(User,on_delete=models.CASCADE)
-    # restaurant=models.ForeignKey(Post,on_delete=models.CASCADE)
-    date_ordered = models.DateTimeField(default=timezone.now)
-    complete = models.BooleanField(default=False)
-
-    def __str__(self):
-        return str(self.customer) 
-
-    @property
-    def get_cart_total(self):
-        orderitems = self.orderitem_set.all()
-        total = sum([item.get_total for item in orderitems])
-        return total
-
-    @property
-    def get_cart_items(self):
-        orderitems = self.orderitem_set.all()
-        total = sum([item.quantity for item in orderitems])
-        return total  
+        super().save(*args, **kwargs)  
 
 class Address(models.Model):
-    customer=models.ForeignKey(User,on_delete=models.CASCADE,null=True,blank=True)
-    order = models.ForeignKey(Order,on_delete=models.CASCADE,null=True,blank=True)
+    Restaurant=models.ForeignKey(User,on_delete=models.CASCADE,null=True,blank=True)
     location=models.CharField(max_length=200,null=True,blank=True)
     lat=models.FloatField(blank=True,null=True)
     long = models.FloatField(blank=True,null=True)
@@ -82,15 +56,20 @@ class Address(models.Model):
         return super(Address,self).save(*args,**kwargs)
     def __str__(self):
         return '%s' % (self.location)
-        
+
 class rregister(models.Model):
+    choice=(
+        ('OPEN','OPEN'),
+        ('CLOSED','CLOSED'))
+    
     restaurant_name=models.OneToOneField(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
     restaurant_logo=models.ImageField(default='logo.jpg', upload_to='profile_pics')
     phone = models.IntegerField(null=True)
     Bio =models.TextField(max_length=1000000)
     email = models.EmailField(null=True)
-    location = models.ForeignKey(Address,on_delete=models.CASCADE)
+    status=models.CharField(choices=choice,max_length=50,default='OPEN',blank=True,null=True)
+    location = models.ForeignKey(Address,on_delete=models.CASCADE,blank=True,null=True)
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)  
@@ -101,6 +80,28 @@ class rregister(models.Model):
      
     def get_absolute_url(self):
         return reverse('post-detail', kwargs={'pk': self.pk})
+
+class Order(models.Model):
+    restaurant = models.ForeignKey(User,on_delete=models.CASCADE)
+    # product=models.ForeignKey(Post,on_delete=models.CASCADE)
+    date_ordered = models.DateTimeField(default=timezone.now)
+    complete = models.BooleanField(default=False)
+
+    def __str__(self):
+        return str(self.restaurant) 
+
+    @property
+    def get_cart_total(self):
+        orderitems = self.orderitem_set.all()
+        total = sum([item.get_total for item in orderitems])
+        return total
+
+    @property
+    def get_cart_items(self):
+        orderitems = self.orderitem_set.all()
+        total = sum([item.quantity for item in orderitems])
+        return total   
+
 
 class register(models.Model):
     customer_name=models.OneToOneField(User, on_delete=models.CASCADE)

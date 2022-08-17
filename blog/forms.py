@@ -1,25 +1,34 @@
 from tkinter import Widget
-from django import forms  
-from . models import Comment,rregister
+from django import forms
+from django.contrib.auth.models import User
+from . models import Comment,rregister,Address
 
 class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
-        fields = ('review','rating',)  
+        fields = ('review','rating',)
         Widgets={
             'review': forms.Textarea(attrs={'class':'form-control'}),
             'rating': forms.Textarea(attrs={'class':'form-control'}),
-
         }
 
 
-class RestaurantRegisterForm(forms.ModelForm):
-    class Meta:
-        model = rregister
-        fields = ('restaurant_name','restaurant_logo','phone','email','location',)  
+class RestaurantRegisterForm(forms.Form):
 
-# class CustomerRegisterForm(forms.ModelForm):
-#     class Meta:
-#         model = register
-#         fields = ('customer_name','image','phone','email','location',)         
-  
+    # class Meta:
+    #     model = User
+        choice=(
+        ('OPEN','OPEN'),
+        ('CLOSED','CLOSED')
+        )
+
+        restaurant_name=forms.CharField()
+        password=forms.CharField(widget=forms.PasswordInput())
+        phone=forms.IntegerField()
+        Bio=forms.CharField(max_length=100000)
+        email= forms.EmailField()
+        location=forms.CharField()
+        status=forms.ChoiceField(choices=choice)
+        
+        # fields = ('restaurant_name','restaurant_logo','phone','email','status')  
+

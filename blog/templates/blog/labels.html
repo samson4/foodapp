@@ -5,7 +5,7 @@
     <div class="card mb-3" style="height: fit-content; overflow: auto;">
       <img src="{{ fasting.image.url }}" style="height: 250px;">
         <div class="card-body text-center">      
-          <a class="btn btn-dark" href="{% url 'user-posts' fasting.author.username %}">{{ fasting.author }}</a>
+          <a class="btn btn-dark" href="{% url 'user-posts' fasting.author.username %}">{{ fasting.author|upper|cut:'1'|cut:'.' }}</a>
           <img class="rounded-circle article-img" src="{{ object.author.profile.image.url }}">         
           <h5 class="text-center">{{ fasting.title }}</h5>
           <span  class="btn-warning">{{ fasting.labels }}</span>
@@ -16,11 +16,11 @@
 </div> 
 {% endfor %}
 {% for cultural in cultural %}
-<div class="col-sm-4">
+<div class="col-sm-4 center d-inline-flex p-2">
     <div class="card mb-3" style="height: fit-content; overflow: auto;">
       <img src="{{ cultural.image.url }}" style="height: 250px;">
         <div class="card-body text-center">      
-          <a class="btn btn-dark" href="{% url 'user-posts' cultural.author.username %}">{{ cultural.author }}</a>
+          <a class="btn btn-dark" href="{% url 'user-posts' cultural.author.username %}">{{ cultural.author|upper|cut:'1'|cut:'.' }}</a>
           <img class="rounded-circle article-img" src="{{ object.author.profile.image.url }}">         
           <h5 class="text-center">{{ cultural.title }}</h5>
           <span  class="btn-warning">{{ cultural.labels }}</span>
@@ -36,7 +36,7 @@
     <div class="card mb-3" style="height: fit-content; overflow: auto;">
       <img src="{{ spicy.image.url }}" style="height: 250px;">
         <div class="card-body text-center">      
-          <a class="btn btn-dark" href="{% url 'user-posts' spicy.author.username %}">{{ spicy.author }}</a>
+          <a class="btn btn-dark" href="{% url 'user-posts' spicy.author.username %}">{{ spicy.author|upper|cut:'1'|cut:'.' }}</a>
           <img class="rounded-circle article-img" src="{{ object.author.profile.image.url }}">         
           <h5 class="text-center">{{ spicy.title }}</h5>
           <span  class="btn-warning">{{ spicy.labels }}</span>
@@ -48,18 +48,33 @@
 {% endfor %}
 {% for new in new %}
 <div class="col-sm-4">
-    <div class="card mb-3" style="height: fit-content; overflow: auto;">
-      <img src="{{ new.image.url }}" style="height: 250px;">
-        <div class="card-body text-center">      
-          <a class="btn btn-dark" href="{% url 'user-posts' new.author.username %}">{{ new.author }}</a>
-          <img class="rounded-circle article-img" src="{{ object.author.profile.image.url }}">         
-          <h5 class="text-center">{{ new.title }}</h5>
-          <span  class="btn-warning">{{ new.labels }}</span>
-          <h5 class="text-center">ETB {{ new.price|floatformat:2 }}</h5>
-          <a href="{% url 'post-detail' new.id %}" class="btn btn-info">View Details</a>
-        </div>
-    </div>
-</div> 
+  <div class="card mb-3" style="height: fit-content; overflow: auto;">
+    <img src="{{ new.image.url }}" style="height: 250px;">
+      <div class="card-body text-center">      
+        <a class="btn btn-dark" href="{% url 'user-posts' new.author.username %}">{{ new.author|upper|cut:'1'|cut:'.' }}</a>
+        <img class="rounded-circle article-img" src="{{ object.author.profile.image.url }}">         
+        <h5 class="text-center">{{ new.title }}</h5>
+        <span  class="btn-warning">{{ new.labels }}</span>
+        <h5 class="text-center">ETB {{ new.price|floatformat:2 }}</h5>
+        <a href="{% url 'post-detail' new.id %}" class="btn btn-info">View Details</a>
+      </div>
+  </div>
+</div>
+{% endfor %}
+{% for best in best %}
+<div class="col-sm-4">
+  <div class="card mb-3" style="height: fit-content; overflow: auto;">
+    <img src="{{ best.image.url }}" style="height: 250px;">
+      <div class="card-body text-center">      
+        <a class="btn btn-dark" href="{% url 'user-posts' best.author.username %}">{{ best.author|upper|cut:'1'|cut:'.' }}</a>
+        <img class="rounded-circle article-img" src="{{ object.author.profile.image.url }}">         
+        <h5 class="text-center">{{ best.title }}</h5>
+        <span  class="btn-warning">{{ best.labels }}</span>
+        <h5 class="text-center">ETB {{ best.price|floatformat:2 }}</h5>
+        <a href="{% url 'post-detail' best.id %}" class="btn btn-info">View Details</a>
+      </div>
+  </div>
+</div>
 {% endfor %}
 
 {%endblock%}

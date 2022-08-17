@@ -126,7 +126,7 @@
                 <div class="card mb-3" style="height: fit-content; overflow: auto;">
                   <img src="{{ post.image.url }}" style="height: 250px;">
                     <div class="card-body text-center">      
-                      <a class="btn btn-dark" href="{% url 'user-posts' post.author.username %}">{{ post.author }}</a>
+                      <a class="btn btn-dark" href="{% url 'user-posts' post.author.username %}">{{ post.author|upper|cut:'1'|cut:'.'}}</a>
                       <img class="rounded-circle article-img" src="{{ object.author.profile.image.url }}">         
                       <h5 class="text-center">{{ post.title }}</h5>
                       <span  class="btn-warning"><a href="{{post.labels}}">{{ post.labels }}</a></span>

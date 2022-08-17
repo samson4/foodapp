@@ -4,20 +4,19 @@
  <h1 class="text-center">Restaurants {{many}}</h1> 
  {{ average }}
 {% for restaurant in restaurants %}
-
  <div class="container-fluid py-5">
   <div class="container">
       <div class=" testimonial-carousel">
           <div class="testimonial-item">
               <img class="position-relative rounded-circle bg-white shadow mx-auto" src="{{restaurant.restaurant_logo.url}}" style="width: 100px; height: 100px; padding: 12px; margin-bottom: -50px; z-index: 1;" alt="">
               <div class="bg-light text-center p-4 pt-0">
-                  <a href="/user/{{restaurant.restaurant_name}}"><h5 class="font-weight-medium mt-5">{{restaurant.restaurant_name|upper}}</h5></a>
+                  <a href="/user/{{restaurant.restaurant_name}}"><h5 class="font-weight-medium mt-5">{{restaurant.restaurant_name|upper|cut:'1'|cut:'.'}} <span class="badge badge-pill badge-warning">{{restaurant.status}}</span></h5></a>
                   
                    <p>{{restaurant.phone}}</p> 
                    <p>{{restaurant.email}}</p> 
-                        <a href="https://www.google.com/maps/@11.947524,43.016047">
+                        <a href="{%url 'location'%}">
                             <p>
-                                {{restaurant.Address}}
+                                {{restaurant.location}}
                             </p>
                         </a>
                     

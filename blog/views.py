@@ -1,7 +1,11 @@
+from cmath import log
 from datetime import datetime
+import email
+# from django.contrib.admin.templates
 from multiprocessing import context
 from urllib import request
 from django import forms
+from django.contrib.admin.views.decorators import staff_member_required
 from django.shortcuts import render, get_object_or_404,redirect
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin,PermissionRequiredMixin
 from django.contrib.auth.decorators import login_required
@@ -76,7 +80,7 @@ def get_cultural_foods(request):
 
 def get_new_foods(request):
     new = Post.objects.filter(labels='New Food')
-    context={-
+    context={
         'new':new
     }
     return render(request,'blog/labels.html',context)
@@ -86,9 +90,9 @@ def recommended(request):
     com = Comment.objects.all()
     Average=com.aggregate(Avg('rating'))
     context={
-        'Average':Average
+        'Average':Average,
     }
-    return render(request,'blog/labels.html',context)
+    return render(request,'blog/about.html',context)
 
 
 def get_best_selling_foods(request):
@@ -115,8 +119,6 @@ class UserPostListView(ListView):
     context_object_name = 'posts'
     paginate_by = 5
     success_url = '/'
-
-
 
     def get_queryset(self):
         user = get_object_or_404(User, username=self.kwargs.get('username'))
@@ -172,20 +174,34 @@ class PostDeleteView(LoginRequiredMixin,UserPassesTestMixin, DeleteView):
         if self.request.user == post.author:
             return True
         return False
-        
-class ResCreateView(CreateView):
-    model = rregister
-    fields = ['restaurant_name','restaurant_logo' ,'phone', 'email','location']
-    template_name = 'blog/rregister_form.html'
-    form = RestaurantRegisterForm()
-    success_url = '/restaurants/'
 
-# class CustomerCreateView(CreateView):
-#     model = register
-#     fields = ['customer_name', 'image' ,'phone', 'email','location']
-#     template_name = 'blog/register.html'
-#     form = CustomerRegisterForm()
-#     success_url = '/restaurants/'    
+def createres(request):
+    form = RestaurantRegisterForm() 
+    if request.method == 'POST':
+        form = RestaurantRegisterForm(request.POST) 
+        if form.is_valid():
+            restaurant_name= form.cleaned_data.get('restaurant_name')
+            password=form.cleaned_data.get('password')
+            # restaurant_logo=form.cleaned_data.get('restaurant_logo')
+            phone=form.cleaned_data.get('phone')
+            email=form.cleaned_data.get('email')
+            status=form.cleaned_data.get('status')
+            location=form.cleaned_data.get('location')
+            user = User(username=restaurant_name,email=email)
+            user.is_staff = True
+            user.set_password(password)
+            user.save()
+            restaurant=rregister(restaurant_name=user,phone=phone,email=email,status=status,location=location)
+            restaurant.save()
+            messages.success(request,'Your Restaurant has been registered successfully!')
+            
+            return redirect('restaurants')
+        else:
+            print(form.errors)
+            messages.error(request,'registeration error.Form is invalid')
+            print('form is invalid')
+
+    return render(request, 'blog/rregister_form.html', {'form': form})
 
 class RestaurantListView(ListView):  
     model = rregister
@@ -193,8 +209,6 @@ class RestaurantListView(ListView):
     context_object_name = 'restaurants'
     # ordering = ['-date_posted']
     # paginate_by = 5
-
-
 
 
 @login_required
@@ -222,32 +236,55 @@ def Cart(request):
         
     }
     return render(request, 'blog/cart.html', context)
-
-def all_orders(request,*args,**kwargs):
+    
+#Customer Order Summary
+@login_required
+def all_orders(request):
     customer=request.user
-    orders=Order.objects.all()
+    # restaurant=OrderItem.objects.get(order__restaurant)
+    # order=Order.objects.get()
+    # print(order.user)
     # complete_orders=OrderItem.objects.filter(orders__complete=True)
     # Order.objects.update(complete=True)
-    choices = OrderItem.objects.all()
     pending = OrderItem.objects.filter(Customer=customer,status='Active')
     complete=OrderItem.objects.filter(Customer=customer,status='Delivered')
     context={
         'pending':pending,
         'complete':complete,
-        'choices':choices
     }
     if request.method =='POST':
             OrderItem.objects.update(Customer=request.user,status='Delivered')
     return render(request,'blog/order_detail.html',context)
 
+
+# restaurant dashbord
+@login_required
+@staff_member_required
+def dashbord(request):
+    user=request.user
+    # order=Order.objects.filter(restaurant =user)
+    pending=OrderItem.objects.filter(status='Active',order__restaurant=user)
+    complete=OrderItem.objects.filter(status='Delivered',order__restaurant=request.user)
+    bill = pending.aggregate(Sum('product__price'))
+    total = bill.get("product__price__sum")
+    context={
+        'pending':pending,
+        'complete':complete,
+        'total':total
+    }
+    return render(request,'blog/dashboard.html',context)
+
+@login_required
 def add_to_cart(request,pk):
     customer = request.user
     product = Post.objects.get(id=pk)
-    order=Order.objects.get(customer=customer)
+    order=Order.objects.create(restaurant=product.author)
+    # order=Order.objects.get(customer=customer)
     # cart = Cart(request) 
     # cart.add(product, product.unit_price, quantity)  
     OrderItem.objects.create(Customer=customer,product=product,order=order,quantity=product.pieces,status='Active')
     return redirect('/cart/')
+
 
 class CartDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = OrderItem
@@ -259,19 +296,18 @@ class CartDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
             return True
         return False
 
-# def remove_from_cart(request, product_id): 
-#     customer=request.user
-#     order=Order.objects.get(customer=customer)
-#     product = OrderItem.objects.get(pk=product_id) 
-#     # cart = OrderItem(request) 
+class OrderDeleteView(LoginRequiredMixin,UserPassesTestMixin,DeleteView):
+    model = OrderItem
+    template_name = 'blog/cancel_order.html'
+    success_url='/'
+    
 
-#     item=OrderItem.objects.get(Customer=customer,product=product,order=order,quantity=order.quantity,status='Active')
-#     OrderItem.remove(item)    
-#     return redirect('/cart/')
-# def get_cart(request): 
-#     return render_to_response('cart.html', dict(cart=Cart(request)))    
-
-
+    def test_func(self):
+        cart = self.get_object()
+        if self.request.user == cart.Customer:
+            return True
+        return False
+   
 @login_required
 def addcomment(request,pk):
     eachfood= Post.objects.get(id=pk)
@@ -314,6 +350,17 @@ class AddressView(ListView):
         context['addresses'] = Address.objects.all()
         return context
 
+@login_required
+def suggest_address(request):
+    restaurant=request.user
+    if request.method=='POST':
+            address=request.POST.get('address')
+            Address.objects.update_or_create(Restaurant=restaurant,location=address)
+            messages.success(request,'Location Added Successfully!')
+            return redirect('location')
+    return render(request,'blog/Autofill.html')
+
+@login_required    
 def payment(request):
     customer = request.user
     Item = OrderItem.objects.filter(Customer=customer,status='Active',order__complete=False)

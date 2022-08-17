@@ -79,11 +79,10 @@
                     <div class="navbar-nav ml-auto py-0">
                     {% if user.is_authenticated %}
                      {%if not user.is_staff %}
-                        <a href="{% url 'blog-home' %}" class="nav-item nav-link active">Home</a>
-                        <a href="{% url 'blog-about'%}" class="nav-item nav-link">About us</a>
+                        <a href="{% url 'order_details'%}" class="nav-item nav-link">Orders</a>
                         <a href="{%url 'profile'%}" class="nav-item nav-link"> My Profile</a>
                         <div class="nav-item ">
-                           <a href="{%url 'restaurants'%}" class="nav-link " >Restaurants</a>
+                           <a href="{%url 'restaurants'%}" class="nav-link " >Partners</a>
                         </div>
                         <a href="{%url 'cart'%}" class="nav-item nav-link">My Cart🛒</a>
                         <div class="dropdown">
@@ -91,30 +90,31 @@
                         </div>
                         <a href="{%url 'logout'%}" class="nav-item nav-link">Logout</a>
                      {% elif user.is_staff %}
-                           <a href="{% url 'post-create' %}" class="nav-item nav-link active">New Post</a>
-                           <a href="{% url 'order_details'%}" class="nav-item nav-link">Orders</a>
+                           <a href="{% url 'post-create' %}" class="nav-item nav-link ">New Post</a>
+                           <a href="{% url 'dashboard'%}" class="nav-item nav-link">Dashboard</a>
                            <a href="{% url 'profile' %}" class="nav-item nav-link"> My Profile</a>
                            <div class="nav-item ">
-                              <a href="{% url 'restaurants'%}" class="nav-link ">Restaurants</a>
+                              <a href="{% url 'restaurants'%}" class="nav-link ">Partners</a>
                            </div>
                            <div class="dropdown">
                             <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Dropdown button
                             </button>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <a class="dropdown-item" href="#">Action</a>
-                                <a class="dropdown-item" href="#">Another action</a>
-                                <a class="dropdown-item" href="#">Something else here</a>
+                                <a class="dropdown-item" href="{%url 'new'%}">New Foods</a>
+                                <a class="dropdown-item" href="{%url 'cultural'%}">Cultural Foods</a>
+                                <a class="dropdown-item" href="{%url 'spicy'%}">Spicy Foods</a>
+                                <a class="dropdown-item" href="{%url 'fasting'%}">Fasting Foods</a>
+                                <a class="dropdown-item" href="{%url 'best'%}">Best selling Foods</a>
                             </div>
                             </div>
                            <a href="{%url 'logout'%}" class="nav-item nav-link">Logout</a>
                      {%endif%}   
                      {%else%} 
-                        <a href="{% url 'blog-home' %}" class="nav-item nav-link active">Home</a>
                         <a href="{% url 'blog-about'%}" class="nav-item nav-link">About us</a>
                         <a href="{%url 'res-reg'%}" class="nav-item nav-link">For Restaurants</a>
                         <div class="nav-item ">
-                           <a href="{% url 'restaurants' %}" class="nav-link ">Restaurants</a>
+                           <a href="{% url 'restaurants' %}" class="nav-link ">Partners</a>
                         </div>
                         <a class="nav-item nav-link">categories</a>
                         <a href="{%url 'login'%}" class="nav-item nav-link">Login</a> 

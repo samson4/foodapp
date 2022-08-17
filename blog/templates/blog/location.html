@@ -13,10 +13,13 @@
 </head>
 <body>
     <h1 class="text-center">Restaurants Near You </h1>
+    {% if user.is_staff%}
+    <a href="{%url 'address'%}"><button type="button">Click here to update your location</button></a>
+    {%endif%}
     
     <div id='map' style='width: 100%; height: 600px;'></div>
     <script>
-    mapboxgl.accessToken = '';
+    mapboxgl.accessToken = 'pk.eyJ1Ijoic2Ftc29uayIsImEiOiJjbDU4azIzMDgwNG9iM2JwNHdrZGxoNjQ5In0.zqMkciLsIJgk-kUW-G4hlQ';
     var map = new mapboxgl.Map({
         container: 'map', // container ID
         style: 'mapbox://styles/mapbox/streets-v11', // style URL

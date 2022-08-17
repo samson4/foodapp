@@ -1,12 +1,13 @@
 from django.db.models.signals import post_save
 from django.contrib.auth.models import User
 from django.dispatch import receiver
-from .models import Order
-@receiver(post_save, sender=User)
+from ..users.models import Profile
+from .models import Order,rregister
+@receiver(post_save, sender=rregister)
 def create_order(sender, instance, created, **kwargs):
     if created:
-        Order.objects.create(user=instance)
+        Profile.objects.create(user=instance)
 
-@receiver(post_save, sender=User)
+@receiver(post_save, sender=rregister)
 def save_profile(sender, instance, **kwargs):
-    instance.order.save()        
+    instance.profile.save()        
