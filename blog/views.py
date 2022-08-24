@@ -1,6 +1,7 @@
 from cmath import log
 from datetime import datetime
 import email
+from http.client import HTTPResponse
 # from django.contrib.admin.templates
 from multiprocessing import context
 from urllib import request
@@ -89,6 +90,7 @@ def get_new_foods(request):
 def recommended(request):
     com = Comment.objects.all()
     Average=com.aggregate(Avg('rating'))
+    best=OrderItem.objects.all()
     context={
         'Average':Average,
     }
@@ -184,6 +186,7 @@ def createres(request):
             password=form.cleaned_data.get('password')
             # restaurant_logo=form.cleaned_data.get('restaurant_logo')
             phone=form.cleaned_data.get('phone')
+            Bio=form.cleaned_data.get('Bio')
             email=form.cleaned_data.get('email')
             status=form.cleaned_data.get('status')
             location=form.cleaned_data.get('location')
@@ -191,7 +194,9 @@ def createres(request):
             user.is_staff = True
             user.set_password(password)
             user.save()
-            restaurant=rregister(restaurant_name=user,phone=phone,email=email,status=status,location=location)
+            loc=Address(Restaurant=user,location=location)
+            loc.save()
+            restaurant=rregister(restaurant_name=user,phone=phone,Bio=Bio,email=email,status=status,location=loc)
             restaurant.save()
             messages.success(request,'Your Restaurant has been registered successfully!')
             
@@ -210,6 +215,10 @@ class RestaurantListView(ListView):
     # ordering = ['-date_posted']
     # paginate_by = 5
 
+# class catagories(ListView):
+#     model=Post
+#     template_name='blog/categories.html'
+#     context_object_name='new'
 
 @login_required
 def Cart(request):
@@ -239,8 +248,11 @@ def Cart(request):
     
 #Customer Order Summary
 @login_required
-def all_orders(request):
+def all_orders(request,*args,**kwargs):
     customer=request.user
+    
+    
+    # print(product)
     # restaurant=OrderItem.objects.get(order__restaurant)
     # order=Order.objects.get()
     # print(order.user)
@@ -248,12 +260,17 @@ def all_orders(request):
     # Order.objects.update(complete=True)
     pending = OrderItem.objects.filter(Customer=customer,status='Active')
     complete=OrderItem.objects.filter(Customer=customer,status='Delivered')
+    Canceled=OrderItem.objects.filter(Customer=customer,status='Canceled')
+
     context={
         'pending':pending,
         'complete':complete,
+        'Canceled' : Canceled,
     }
     if request.method =='POST':
-            OrderItem.objects.update(Customer=request.user,status='Delivered')
+            messages.success(request,'Order canceled successfully.Please note that after the restaurants approves your request to cancel the order,you will recieve the refund in 1 to 2 business days!')
+            order=OrderItem.objects.filter(Customer=request.user,status='Active',id=request.POST['id'])
+            order.update(status='Canceled')
     return render(request,'blog/order_detail.html',context)
 
 
@@ -263,15 +280,23 @@ def all_orders(request):
 def dashbord(request):
     user=request.user
     # order=Order.objects.filter(restaurant =user)
-    pending=OrderItem.objects.filter(status='Active',order__restaurant=user)
+    pending=OrderItem.objects.filter(status='Active',order__restaurant=user).order_by('-id')
+    print(pending)
     complete=OrderItem.objects.filter(status='Delivered',order__restaurant=request.user)
+    Canceled=OrderItem.objects.filter(status='Canceled',order__restaurant=request.user)
     bill = pending.aggregate(Sum('product__price'))
     total = bill.get("product__price__sum")
     context={
         'pending':pending,
         'complete':complete,
+        'Canceled':Canceled,
         'total':total
     }
+    if request.method == 'POST':
+        order=OrderItem.objects.filter(status='Active',order__restaurant=request.user, id=request.POST['id'])
+        print(order)
+        order.update(status='Delivered')
+        # OrderItem.objects.update(status='Delivered',order=order)
     return render(request,'blog/dashboard.html',context)
 
 @login_required
@@ -307,7 +332,8 @@ class OrderDeleteView(LoginRequiredMixin,UserPassesTestMixin,DeleteView):
         if self.request.user == cart.Customer:
             return True
         return False
-   
+
+
 @login_required
 def addcomment(request,pk):
     eachfood= Post.objects.get(id=pk)
@@ -343,19 +369,30 @@ def about(request):
 
 class AddressView(ListView):
     model = Address    
-    template_name = 'blog/location.html'
+    template_name = 'users/location.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['addresses'] = Address.objects.all()
         return context
 
+
+
 @login_required
 def suggest_address(request):
     restaurant=request.user
     if request.method=='POST':
             address=request.POST.get('address')
-            Address.objects.update_or_create(Restaurant=restaurant,location=address)
+            # res=rregister.objects.filter(restaurant_name=request.user)
+            # print(res)
+            # res.update(Address__location=addre)
+            # restaurant=rregister.objects.get(restaurant_name=restaurant)
+            
+            Addr=Address.objects.filter(Restaurant=restaurant)
+            # print(Addr)
+            Addr.update(location=address)
+            
+            # Address.objects.update_or_create(Restaurant=restaurant,location=address)
             messages.success(request,'Location Added Successfully!')
             return redirect('location')
     return render(request,'blog/Autofill.html')

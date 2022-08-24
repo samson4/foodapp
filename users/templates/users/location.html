@@ -1,0 +1,52 @@
+{%include 'blog/base.html'%}
+{%block content%}
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Display a map on a webpage</title>
+<meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+<link href="https://api.mapbox.com/mapbox-gl-js/v2.9.2/mapbox-gl.css" rel="stylesheet">
+<script src="https://api.mapbox.com/mapbox-gl-js/v2.9.2/mapbox-gl.js"></script>
+<style>
+body { margin: 0; padding: 0; }
+#map { position: absolute; top: 50px; bottom: 40px; width: 100%; }
+</style>
+</head>
+<body>
+<div id="map"></div>
+<script>
+	mapboxgl.accessToken = 'pk.eyJ1Ijoic2Ftc29uayIsImEiOiJjbDZ6N3E2ZDQwMXJmM3BwZ25uaHY3ZHB3In0.4iruwfH-yaW8G07TrUOZFA';
+    const map = new mapboxgl.Map({
+        container: 'map', // container ID
+        style: 'mapbox://styles/mapbox/streets-v11', // style URL
+        center: [37.387978239, 11.594798175], // starting position [lng, lat]
+        zoom: 13, // starting zoom
+        projection: 'globe' // display the map as a 3D globe
+    });
+    '{% for address in addresses %}|escapejs'
+    var marker = new mapboxgl.Marker({draggable:true})
+        .setLngLat(['{{ address.long|escapejs }}','{{ address.lat|escapejs }}'])
+        .setPopup(new mapboxgl.Popup().setHTML("<p>{{ address.address|escapejs }}</p>"))
+        .addTo(map);        
+        console.log('{{address.lat|escapejs}}')
+    '{% endfor %}|escapejs' 
+    map.addControl(new mapboxgl.GeolocateControl({
+    positionOptions: {
+        enableHighAccuracy: true
+    },
+    trackUserLocation: true,
+   
+}));
+
+  
+</script>
+<div style="position:absolute">
+    <h1 >Restaurants Near You</h1>
+    {% if user.is_staff%}
+        <a href="{%url 'address'%}"><button type="button">Click here to update your location</button></a>
+    {%endif%}
+</div>
+</body>
+</html>
+{%endblock content%}

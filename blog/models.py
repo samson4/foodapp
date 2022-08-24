@@ -57,6 +57,8 @@ class Address(models.Model):
     def __str__(self):
         return '%s' % (self.location)
 
+
+
 class rregister(models.Model):
     choice=(
         ('OPEN','OPEN'),
@@ -121,7 +123,8 @@ class register(models.Model):
 class OrderItem(models.Model):
     ORDER_STATUS = (
         ('Active', 'Active'),
-        ('Delivered', 'Delivered')
+        ('Delivered', 'Delivered'),
+        ('Canceled', 'Canceled'),
     )
     Customer = models.ForeignKey(User, on_delete=models.CASCADE)
     product = models.ForeignKey(Post, on_delete=models.CASCADE)
@@ -141,6 +144,7 @@ class OrderItem(models.Model):
     def get_total(self):
         total = self.product.price * self.quantity
         return total
+
 rate_choices = ((1, 'bad'), (2, 'not tasty'),(3,'ok'),(4,'good'),(5,'delicious'))
 class Comment(models.Model):
 

@@ -24,7 +24,6 @@ from .views import (
     PostUpdateView,
     PostDeleteView,
     UserPostListView,
-    
     RestaurantListView
 )
 

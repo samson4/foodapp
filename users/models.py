@@ -3,18 +3,6 @@ from django.contrib.auth.models import User
 from PIL import Image
 
 
-
-# class Users(AbstractUser):
-#     is_restaurant = models.BooleanField(default=False)
-#     is_customer = models.BooleanField(default=False)
-
-# class Restaurant(models.model):
-#     pass
-
-# class Customer(models.Model):
-#     pass
-
-
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     image = models.ImageField(default='default.jpg', upload_to='profile_pics')

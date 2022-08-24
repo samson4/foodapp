@@ -27,7 +27,7 @@ class RestaurantRegisterForm(forms.Form):
         phone=forms.IntegerField()
         Bio=forms.CharField(max_length=100000)
         email= forms.EmailField()
-        location=forms.CharField()
+        location=forms.CharField(label='Accurate Location')
         status=forms.ChoiceField(choices=choice)
         
         # fields = ('restaurant_name','restaurant_logo','phone','email','status')  

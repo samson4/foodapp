@@ -1,0 +1,48 @@
+{%extends 'blog/layout.html'%}
+{%block content%}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src='https://api.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.js'></script>
+    <link href='https://api.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.css' rel='stylesheet' />
+
+    <title>Document</title>
+</head>
+<body>
+    <h1 class="text-center">Restaurants Near You </h1>
+    {% if user.is_staff%}
+    <a href="{%url 'address'%}"><button type="button">Click here to update your location</button></a>
+    {%endif%}
+    
+    <div id='map' style='width: 100%; height: 600px;'></div>
+    <script>
+    mapboxgl.accessToken = 'pk.eyJ1Ijoic2Ftc29uayIsImEiOiJjbDZ6N3E2ZDQwMXJmM3BwZ25uaHY3ZHB3In0.4iruwfH-yaW8G07TrUOZFA';
+    var map = new mapboxgl.Map({
+        container: 'map', // container ID
+        style: 'mapbox://styles/mapbox/streets-v11', // style URL
+        center: [37.387978239, 11.594798175], // starting position [lng, lat]
+        zoom: 13 // starting zoom
+        
+    });
+    '{% for address in addresses %}|escapejs'
+    var marker = new mapboxgl.Marker({draggable:true})
+        .setLngLat(['{{ address.long|escapejs }}','{{ address.lat|escapejs }}'])
+        .setPopup(new mapboxgl.Popup().setHTML("<p>{{ address.address|escapejs }}</p>"))
+        .addTo(map);        
+        console.log('{{address.lat|escapejs}}')
+    '{% endfor %}|escapejs'
+
+    map.addControl(new mapboxgl.GeolocateControl({
+    positionOptions: {
+        enableHighAccuracy: true
+    },
+    trackUserLocation: true,
+   
+}));
+    </script>
+</body>
+</html>
+{%endblock%}
